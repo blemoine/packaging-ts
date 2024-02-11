@@ -164,7 +164,7 @@
 
         <section>
           <h2>Changelog</h2>
-          Good practice to write one. standard-verrsion, as a bonus autogenerate
+          Good practice to write one. standard-version, as a bonus autogenerate
           the changelog
         </section>
 
@@ -235,6 +235,7 @@
     "scripts": {
       // ...
       "build": "rm -rf dist && tsc && tsc -p ./tsconfig.esm.json",
+      "prepack": "npm run build"
       // ...
     }
     // ...
@@ -258,20 +259,8 @@
             <li class="fragment">
               Write your own utility functions when you can
             </li>
+            <li class="fragment">Use your own interface + adapter pattern</li>
           </ul>
-        </section>
-
-        <section>
-          <h2>Minimize dependencies</h2>
-          <p class="fragment">Use your own interface + adapter pattern</p>
-          TODO eg. I need a function to display a date in a specific timezone
-          <pre class="fragment"><code >
-
-          </code></pre>
-          <pre class="fragment"><code >
-
-
-          </code></pre>
         </section>
 
         <section>
@@ -304,7 +293,7 @@ src // depends if you want to include source or not
           <pre><code data-trim>
                   npm pack --dry-run
           </code></pre>
-            <pre><code data-trim>
+          <pre><code data-trim>
 npm notice === Tarball Contents ===
 npm notice 144B dist/cjs/index.d.ts
 npm notice 201B dist/cjs/index.d.ts.map
