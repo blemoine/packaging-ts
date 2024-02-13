@@ -90,10 +90,10 @@
           <h2>Why should you create a package?</h2>
           <ul>
             <li class="fragment">
-              Sharing code between project<strong style="font-size: 130%"
+              Sharing code between project<strong style="font-size: 150%"
                 >s</strong
               >
-              or user<strong style="font-size: 130%">s</strong>
+              or user<strong style="font-size: 150%">s</strong>
             </li>
             <li class="fragment">CLI tools</li>
             <li class="fragment">Learning</li>
@@ -164,8 +164,12 @@
 
         <section>
           <h2>Changelog</h2>
-          Good practice to write one. standard-version, as a bonus autogenerate
-          the changelog
+          <ul>
+            <li class="fragment">Good practice to have a changelog</li>
+            <li class="fragment">
+              <code>standard-version</code> auto-generate one
+            </li>
+          </ul>
         </section>
 
         <section>
@@ -187,7 +191,7 @@
     "declarationMap": true,
     "module": "commonjs",
     "target": "es2022", // depends which node version you target
-    "outDir": "dist/cjs", // we'll need that in package.json
+    "outDir": "dist", // we'll need that in package.json
     // ...
   },
 }
@@ -195,47 +199,22 @@
           </code></pre>
         </section>
 
-        <section>
-          <h2>Build for CJS and ESM</h2>
-          <pre><code data-trim class="json">
-// tsconfig.esm.json
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "module": "NodeNext",
-    "outDir": "./dist/esm",
-    "moduleResolution": "NodeNext"
-  },
-  "include": ["./src/index.ts"]
-}
-            </code></pre>
-        </section>
+
 
         <section>
           <h2>package.json</h2>
           <pre><code data-trim class="json">
 {
     // ...
-    “types": "./dist/cjs/types/index.d.ts",
-    "main": "./dist/cjs/index.js",
-    "type": "module",
+    “types": "./dist/index.d.ts",
+    "main": "./dist/index.js",
     "engines": {
         "node": ">=18.0.0"
     },
-    "exports": {
-        "import": {
-          "path": "./dist/ejs/index.js",
-          "type": "module"
-        },
-        "require": {
-          "path": "./dist/cjs/index.js",
-          "type": "commonjs"
-        }
-    },
     "scripts": {
       // ...
-      "build": "rm -rf dist && tsc && tsc -p ./tsconfig.esm.json",
-      "prepack": "npm run build"
+      "build": "rm -rf dist && tsc",
+      "prepare": "npm run build"
       // ...
     }
     // ...
@@ -282,10 +261,9 @@
 .eslintrc.js
 .eslintignore
 .prettierc
-tsconfig*.json
+tsconfig.json
 jest.config.js
 test
-src // depends if you want to include source or not
           </code></pre>
         </section>
         <section>
@@ -295,14 +273,9 @@ src // depends if you want to include source or not
           </code></pre>
           <pre><code data-trim>
 npm notice === Tarball Contents ===
-npm notice 144B dist/cjs/index.d.ts
-npm notice 201B dist/cjs/index.d.ts.map
-npm notice 204B dist/cjs/index.js
-npm notice 51B  dist/cjs/index.test.d.ts
-npm notice 117B dist/cjs/index.test.d.ts.map
-npm notice 144B dist/esm/index.d.ts
-npm notice 201B dist/esm/index.d.ts.map
-npm notice 75B  dist/esm/index.js
+npm notice 144B dist/index.d.ts
+npm notice 201B dist/index.d.ts.map
+npm notice 204B dist/index.js
 npm notice 660B package.json
 npm notice === Tarball Details ===
 npm notice version:       0.0.1
@@ -319,7 +292,7 @@ npm pack --pack-destination /tmp
           </code></pre>
           <pre><code data-trim>
 "dependencies": {
-  "@my-name/my-package": "file:/tmp/my-name/my-package-0.0.1.tgz"
+  "@my-name/my-package": "file:///tmp/my-name/my-package-0.0.1.tgz"
 }
           </code></pre>
         </section>
@@ -336,15 +309,6 @@ npm link @my-name/my-package
         </section>
 
         <section>
-          <h2>Dependency package - how to test it?</h2>
-          <pre><code data-trim>
-"dependencies": {
-  "@my-name/my-package": "file:~/my-name/my-package"
-}
-          </code></pre>
-        </section>
-
-        <section>
           <h2>Dependency package - Repository auth</h2>
           <pre><code data-trim>
 //.npmrc file
@@ -356,10 +320,13 @@ npm link @my-name/my-package
           <h2>Dependency package - actually packaging</h2>
           <pre><code data-trim>
 {
+  //...
   "scripts": {
-      "prepare": "npm run build",
+      //...
       "release": "npx standard-version && git push --follow-tags origin master"
+      //...
   }
+  //...
 }
           </code></pre>
         </section>
