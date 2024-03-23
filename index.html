@@ -51,9 +51,6 @@
                 >https://lemoine-benoit.medium.com/</a
               >
             </li>
-            <li>
-              <a href="https://twitter.com/benoit_lemoine">@benoit_lemoine</a>
-            </li>
           </ul>
           <img
             style="display: inline-block; width: 200px; vertical-align: top"
@@ -199,8 +196,6 @@
           </code></pre>
         </section>
 
-
-
         <section>
           <h2>package.json</h2>
           <pre><code data-trim class="json">
@@ -230,6 +225,34 @@
               Be as lenient as possible on version the packages depends on
             </li>
           </ul>
+
+          <pre class="fragment"><code data-trim>
+// package.json
+"dependencies": {
+   "dayjs": "^1.11.2"
+}
+            </code></pre>
+        </section>
+
+        <section>
+          <h2>Minimize dependencies</h2>
+          <p>
+            If the public interface depends on third party,
+
+            <code>@types/whatever</code> becomes a <code>dependencies</code>
+          </p>
+          <pre class="fragment"><code data-trim>
+// your package
+import { Pool } from 'pg';
+export const buildPool = (): Pool => // ...
+
+            </code></pre>
+          <pre class="fragment"><code data-trim>
+// your client
+const a: Pool = buildPool();
+// Pool comes from `@types/pg` => either your user install it...
+// or you add `@types/pg` as dependencies
+            </code></pre>
         </section>
 
         <section>
@@ -238,6 +261,7 @@
             <li class="fragment">
               Write your own utility functions when you can
             </li>
+
             <li class="fragment">Use your own interface + adapter pattern</li>
           </ul>
         </section>
@@ -248,7 +272,6 @@
             <li class="fragment">package.json</li>
             <li class="fragment">compiled code</li>
             <li class="fragment">type definitions</li>
-            <li class="fragment">source?</li>
           </ul>
         </section>
 
@@ -304,7 +327,7 @@ npm link
           </code></pre>
           <pre><code data-trim>
 // In the project you want to test the dependencies
-npm link @my-name/my-package
+npm link my-package
           </code></pre>
         </section>
 
@@ -319,21 +342,19 @@ npm link @my-name/my-package
         <section>
           <h2>Dependency package - actually packaging</h2>
           <pre><code data-trim>
-{
+//...
+"scripts": {
   //...
-  "scripts": {
-      //...
-      "release": "npx standard-version && git push --follow-tags origin master"
-      //...
-  }
+  "release": "npx standard-version && git push --follow-tags origin master"
   //...
 }
+//...
           </code></pre>
         </section>
 
         <section>
           <h2>Dependency package - publishing</h2>
-          <pre><code data-trim>
+          <pre><code data-trim class="bash">
 git fetch
 git checkout main
 git reset --hard HEAD
@@ -346,7 +367,7 @@ npm publish
           <h2>Publishing a CLI</h2>
           <pre><code data-trim>
 // in package.json
-            "bin": "bin/my-executable"
+"bin": "bin/my-executable"
           </code></pre>
           <pre><code data-trim>
 // bin/my-executable file
@@ -358,7 +379,13 @@ require("../dist/index.js");
         <section>
           <h2>Publishing a CLI tips</h2>
           <ul>
-            <li>Try to be OS agnostic: use rimraf, cross-env, shx,</li>
+            <li>
+              Try to be OS agnostic: use
+              <a href="https://www.npmjs.com/package/rimraf">rimraf</a>,
+              <a href="https://www.npmjs.com/package/cross-env">cross-env</a>,
+              <a href="https://www.npmjs.com/package/shx">shx</a>
+            </li>
+            <li>Try to make it runnable through npx</li>
           </ul>
         </section>
 
